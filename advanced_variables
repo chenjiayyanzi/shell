@@ -1,0 +1,59 @@
+#!/bin/bash
+echo $BASH
+echo $$
+
+echo $BASHPID
+
+for n in 0 1 2 3 4 5
+do 
+  echo "BASH_VERSINFO[$n] = ${BASH_VERSINFO[$n]}"
+done
+
+echo "$HOSTNAME"
+echo "$HOSTTYPE"
+
+TMOUT=10
+echo "What is your favorite song ?"
+echo "you only have $TMOUT seconds to answer!"
+read song
+if [[ -z "$song" ]]
+then song="No answer"
+fi
+echo "Your favorite song is $song."
+
+ROOT_UID=0
+if [ "$UID" -eq "$ROOT_UID" ]
+then echo "You are root."
+else echo "You are just an ordinary user"
+fi
+
+ROOTUSER_NAME=root
+username=`id -nu`
+if [ "$username" = "$ROOTUSER_NAME" ]
+then echo "Rooty,toot,toot,you are root."
+else echo "you are just a regular fella."
+fi
+
+# declare -r readonly
+declare -r var1=1
+echo $var1
+(( var1++ ))
+
+#declare -i integer
+declare -i number
+number=3
+echo "Number=$number"
+number=three
+echo "number=$number"
+
+
+#declare -a array
+declare -a indices
+
+#declare -f function_name
+#declare -x export
+
+#$RANDOM is an internal bash function that returns a pseudorandom interger 
+#in the range 0-32767
+number=$RANDOM
+echo $number
