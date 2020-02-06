@@ -1,0 +1,28 @@
+#!/bin/bash
+#cleanup
+
+
+LOG_DIR=/Users/chenjiayu/devops/shellscripting
+ROOT_UID=0	 #only users with $UID 0 have root privileges.
+E_XCD=86  	 #can't change directory
+E_NOTROOT=87	 #not-root exit error
+
+if [ $UID -ne $ROOT_UID ]
+then
+  echo "Must be root to run this script."
+  exit $E_NOTROOT
+fi
+
+cd $LOG_DIR
+if [ `pwd` != "$LOG_DIR" ]
+then
+  echo "Can't change to $LOG_DIR."
+  exit $E_XCD
+fi
+
+
+cat /dev/null >messages
+cat /dev/null > wtmp
+echo "Log files cleaned up."
+
+exit 0

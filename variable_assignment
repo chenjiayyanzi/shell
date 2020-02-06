@@ -1,0 +1,24 @@
+#!/bin/bash
+a=789
+echo "The value of \"a\" is $a."
+
+let a=16+5
+echo "The value of \"a\" now is $a"
+
+for a in 7 8 9 10
+do
+  echo -n "$a"
+done
+echo
+echo
+echo -n "Enter \"a\" "
+read a 
+echo "The value of \"a\" is now $a."
+
+a=`echo Hello!`
+echo $a
+a=`ls -l`
+echo $a
+echo
+echo "$a"
+

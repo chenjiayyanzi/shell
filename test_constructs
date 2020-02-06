@@ -1,0 +1,45 @@
+#!/bin/bash
+# if/then construct test whether the exit status of a list of commnads is 0
+# a dedicated command calle [] bracket, it is a synonym for test
+# with version 2.02, bash introduced the [[]] extedend test command.
+
+# if can test any command
+if cmp a b &>/dev/null
+then echo "Files a and b are identical."
+else echo "Files a and b differ."
+fi
+
+if grep -q Bash cleanup 
+then echo "File contains at least one occurrence of Bash."
+fi
+
+word=Linux
+letter_sequence=inu
+if echo "$word"|grep -q "$letter_sequence"
+then echo "$letter_sequence found in $word"
+else echo "$letter_sequene not found in $word"
+fi
+
+if test -z "$1"
+then echo "No command-line arguments"
+else echo "First command-line argument is $1"
+fi
+echo
+
+if /usr/bin/test -z "$1"
+then echo "No command-line argumets"
+else echo "First command-line argument is $1"
+fi
+echo 
+
+if [ -z "$1" ]
+then echo "No command-line arguments"
+else echo "First command-line argument is $1"
+fi
+echo
+if /usr/bin/[ -z "$1" ]
+then echo "No command-line argument"
+else echo "First command-line argumet is $1"
+fi
+echo 
+exit 0
