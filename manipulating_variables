@@ -4,9 +4,56 @@ stringZ=abcdABCD123ABCabc
 echo ${#stringZ}
 echo `expr "$stringZ" : '.*'`
 
-MINLEN=60
-while read line
-do 
-  echo $line
-  len=${#line}
-  if [[ "$len" -lt "$MINLEN" && "$line" =~
+#substring extraction
+#$(sting:position}, ${string:position:length}
+echo ${stringZ:3}
+echo ${stringZ:3:3}
+echo ${stringZ: -4}
+
+#generate 8-character random string
+if [[ -n "$1" ]]
+then str0=$1
+else str0=$$
+fi
+
+echo $str0
+POS=2
+LEN=8
+str1=$( echo "$str0" | md5sum | md5sum )
+randstring=${str1:$POS:$LEN}
+echo $randstring
+
+#if the string parameter is * or @, then this extracts a maxinum of $length
+#positional parameters
+echo ${*:2}
+echo ${@:2:3}
+
+#substring removal
+#${sting#substring}: deletes shortest match from front of $string 
+#${string##substring}:deletes longest match from front of $string
+echo ${stringZ#a*C}
+echo ${stringZ##a*C}
+#${string%substring}: deletes shortest match of $substring from back of $string
+#rename all filename with "TXT" to "txt"
+SUFF=TXT
+suff=txt
+for i in $(ls *.$SUFF)
+do
+  mv -f $i ${i%.$SUFF}.$suff
+done
+
+
+#substring replacement
+#${string:substring:replacement}:repalce first match of $substring with $replacement
+#${string//substring/replacement}:replace all matches of $subtring with $replacement
+echo ${stringZ/abc/xyz}
+echo ${stringZ//abc/xyz}
+match=abc
+repl=000
+echo ${stringZ/$match/$repl}
+echo ${stringZ//$match/$repl}
+
+#${string/#substring/replacement}:subsitute the front end of string
+#${string/%substring/replacement}:subsitute the back end of string
+echo ${stringZ/#abc/XYZ}
+echo ${stringZ/%abc/XYZ}
