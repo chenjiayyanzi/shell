@@ -1,0 +1,12 @@
+#!/bin/bash
+#string length
+stringZ=abcdABCD123ABCabc
+echo ${#stringZ}
+echo `expr "$stringZ" : '.*'`
+
+MINLEN=60
+while read line
+do 
+  echo $line
+  len=${#line}
+  if [[ "$len" -lt "$MINLEN" && "$line" =~
