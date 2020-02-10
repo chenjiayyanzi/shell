@@ -1,0 +1,74 @@
+#!/bin/bash
+
+#find 
+find ~/ -name '*.txt'  
+#find -exec command \; carries out command on each file that find matches.
+#if command contains {}, then find substitues the full path name of the select file
+#for "{}"
+
+find ~/ -name 'core*' -exec rm {} \;
+#remove all core dump files from user's home directory
+
+find /home/bozo/projects -mtime -1
+#lists all files that were modifies within the last day
+
+find home/bozo/projects -mtime 1
+#lists all files that were modifies exactly one day ago
+
+# mtime = last modification time of the target file
+# ctime = last status change time
+# atime = last access time
+
+DIR=/home/bozo/junk_files
+find "$DIR" -type f -atime +5 -exec rm {} \;
+#deletes all the fines that have not been accessed in at least 5 days.
+
+find . -name '*[+{:||+?~()<>&*|$ }*' -maxdepth 0 -exec rm -f '{} \;
+#deletes fukes containing these nasties:     + { ; " \ = ? ~ ( ) < > & * | $
+
+#xargs: a filter feeding arguments to a command, and also a tool for assembling the
+#commands themselves. It breaks a data stream into small enough chunks for filters
+#and commands to process.
+
+find ~/mail -type f |xargs grep "Linux"
+ls |xargs -n 8 echo  # -n NN, limits to NN the number of arguments passed
+# lists the files in the current diretory in 8 columns
+
+#another useful option is -0, in combination with find -print0 or grep -lZ
+#this allows handling arguments containing whitespace or quotes.
+find ~ -type f -print0 | xargs -0 grep -liwZ GUI | xargs -0 rm -f 
+grep -rliwZ GUI ~|xargs -0 rm -f
+
+#generates a log file in current directory
+tail -n 10 /var/log/wifi.log |xargs |fmt -s >>logfile
+echo >>logfile	
+
+#copying files in current directory to another
+ls . |xargs -i -t cp ./{} directory_to_copy_to
+#-t is verbose option
+#-i is replace strings option
+#{} is a placeholder for output text
+
+#killing processes by name
+ps ax|grep "$PROCESS_NAME" |awk '{print $1}'|xargs -i kill {} 2&>/dev/null
+
+#word frequency analysis using xargs
+cat "$FILENAME" |xargs -n1|tr A-Z a-z| \
+sed -e 's/\.//g' -e 's/\,//g' -e 's/ //g' | \
+sort | uniq -c |sort -nr
+#filter out periods and commas cchange change space betwenn words
+#finally remove duplicates, prefix occurrences count and sort numerically
+
+#time/date and timing
+echo "The number if days since the year's beginning is `date +%j`"
+#date calculations
+
+#cut: a tool for extracting fields from file
+#particularly important are the -d(delimiter) and -f(field specifile) optionuname -a |cut -d" " -f1,3,11,12
+#using cut to list the os and kernel version
+#using cut to parse a file
+FILENAME=/etc/passwd
+for user in $(cut d":" -f1 $FILENAME)
+do
+  echo $user
+done

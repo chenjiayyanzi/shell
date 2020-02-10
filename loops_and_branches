@@ -1,0 +1,78 @@
+#!/bin/bash
+
+#for loops
+#for arg in [list]
+#do
+#  commands
+#done
+
+for planet in Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune Pluto
+do
+  echo $planet
+done
+
+#PASSWORD_FILE=/etc/passwd
+#n=1
+#for name in $(awk 'BEGIN{FS=":"}{print $1}' <"$PASSWORD_FILE")
+#do
+#  echo "USER #$n = $name"
+#  let "n +=1"
+#done
+
+#while loop
+#while [ condition ]
+#do
+#  commands
+#done
+
+#while [ "$var1" != "end" ]
+#do
+#  echo "Input variable #1 (end to exit)"
+#  read var1
+#  echo "variable #1 = $var1"
+#  echo
+#done
+
+
+#until loops
+#until [ condition-is-true ]
+#do
+#  commands
+#done
+
+#until [ "$var1" == "end" ]
+#do
+#  echo "Input the variable var1"
+#  echo "end to exit"
+#  read var1
+#  echo "Variable var1 = $var1"
+#  echo
+#done
+
+#for outerloop in 1 2 3 4 5 
+#do 
+#  echo -n "Group $outerloop"
+#  for innerloop in 1 2 3 4 5
+#  do 
+#    echo -n "$innerloop"
+#    if [ "$innerloop" -eq 3 ]
+#    then 
+#       break
+#    fi
+#  done
+#  echo
+#done
+
+
+#case 
+echo
+echo "Hit a key,then hit return"
+read keypress
+case "$keypress" in
+  [[:lower:]] ) echo "Lowercase letter";;
+  [[:upper:]] ) echo "Uppercase letter";;
+  [0-9] ) echo "Digit";;
+  * ) echo "other";;
+esac
+
+
