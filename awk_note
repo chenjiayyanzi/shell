@@ -1,0 +1,25 @@
+#-F: use the colon as a separator
+awk -F: '{print $1}' /etc/passwd
+
+#you can type your awk script in a file and specify that file using the -f option
+cat testfile
+{print $1 "home at " $6}
+
+awk -F: -f testfile /etc/passwd
+
+#you can use BEGIN keyword to do preprocessing 
+#also, you can use END keyword to do postprocessing
+cat testfile2
+BEGIN{
+print "Users and their corresponding home"
+print "Username \t Home"
+FS=":"
+}
+{
+print $1 "\t" $6
+}
+END{
+print "The END"
+}
+
+awk -f testfile2 /etc/passwd

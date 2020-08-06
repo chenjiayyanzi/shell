@@ -1,0 +1,27 @@
+#download a single file
+curl http://www.centos.org
+
+#to store the output in a file
+curl http://www.centos.org > centos.html
+
+#save the curl output to a file  -o:will save the result in the filename provided in the command line
+# -O: the filename in the URL will be taken and it will be used as the filename to store the result
+curl -o mygettext.html http://www.centos.org
+curl -O http://www.gnu.org/software/gettext/manual/gettext.html
+
+#fetch multiple files at a time
+curl -O URL1 -O URL2
+
+#continue/resume a previous download: by using option -C
+#if we say '-C -' , then curl will find from where to start resume the download
+curl -C - -O http://www.gnu.org/software/gettext/manual/gettext.html
+
+#pass http authentication in CURL,with the help of -u option
+curl -u username:password URL
+
+#download files from FTP server
+curl -u ftpuser;ftppass -O ftp://ftp_server/public_html/xss.php
+
+#upload files to FTP server: with -T option
+curl -u ftpuser:ftppass -T myfile.txt ftp://ftp.testserver.com
+

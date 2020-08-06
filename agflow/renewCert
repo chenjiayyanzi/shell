@@ -1,0 +1,67 @@
+#!/bin/bash
+
+#generate logfile
+TMPFILE=/tmp/certbot.$RANDOM.log
+
+#verify the first argument: the name of the container
+if [ ! -n "$1" ]
+then
+  echo "Please specify the name of the container"
+  exit 1
+else
+  container_name="$1"
+fi
+
+
+stop_container() {
+  container_name_inside="$1"
+  echo "We will stop the container $container_name_inside"
+  echo ".........................................."
+  docker container stop "$container_name_inside" &> $TMPFILE
+  if [ $? -ne 0 ]
+  then
+    echo "Sorry, we failed to stop the container, please check the logfile $TMPFILE"
+    exit 1
+  else
+    echo "the container $container_name_inside has been stopped"
+  fi
+  }
+
+#stop the container
+docker ps |grep "$container_name"
+if [ $? -ne 0  ]
+then
+  echo "Please make sure the container $container_name exists"
+  exit 1
+else
+  stop_container "$container_name"
+fi
+
+
+#renew the certificate with certbot
+certbot renew &>$TMPFILE
+if [ $? -ne 0 ]
+then
+  echo "failed to renew the certification, please check the log file $TMPFILE"
+  exit 1
+fi
+
+#stop the unknown nginx
+nginx -s stop &>$TMPFILE
+if [ $? -ne 0 ]
+then
+  echo "Failed to stop nginx, please check the log file $TMPFILE"
+  exit 1
+fi
+
+
+#start container
+docker container start "$1" &>$TMPFILE
+if [ $? -ne 0 ]
+then
+  echo "Failed to start the container, please check the log file $TMPFILE"
+  exit 1
+else
+  echo "We have renewed the certification."
+fi
+

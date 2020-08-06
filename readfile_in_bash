@@ -1,0 +1,42 @@
+#read the first line in a file
+#-r make sure the input is read raw, meaning the backslashes wont get escaped
+read -r line < filename
+
+#or
+line=`head -l filename`
+
+
+#read a file line-by-line
+while read -r line; do
+  echo $line
+done < filename
+
+#if you want to preserve space,tab , set IFS to nothing for the time being
+while IFS= read -r line; do
+  #do something with $line
+done < filename
+
+#if you dont like to put <filename in the end, you can also pipe the contents of the file
+#to the while loop
+cat filename | while read -r line; do
+  #do something with $line
+done
+
+
+#read the first three columns/field from a file into variables
+while read -r field1 field2 field3 throwaway; do
+  #do something with the fields
+done < filename
+#put the remaining fields in the last variable. if we didnt have the throwaway, and the file 
+#has more than three colomns, the third field would get the leftovers.
+#sometimes it's shorter to just write _ for the throwaway variable:
+
+while read -r field1, field2, field3, _; do
+  #do something with the fields
+done < filename
+
+
+#the size of the file
+size=$(wc -c < filename)
+
+

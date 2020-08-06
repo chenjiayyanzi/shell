@@ -1,0 +1,67 @@
+#split a string on a given character
+#for example you have a string foo-bar-zoo and you want to split in on the dash
+#you can combien IFS with read to do it
+str=foo-bar-zoo
+IFS=- read -r x y z <<< "$str"
+
+#you can also put the split fields in a array
+IFS=- read -ra parts <<< "foo-bar-zoo"
+#you can access array elements through ${part[0]},${parts[1]},${parts[2]}
+
+#process a string character by charater
+while IFS= read -rn1 c; do
+  #do something with $c
+done <<< "$str"
+#here we use the -n1 argument to read command to make it read the input character at a time
+#similarly we can use -n2 to read two chars at a time, etc
+
+#replace substring, replace foo with bar in a string
+echo ${str/foo/bar}
+#to replace all occurences of "foo" with "bar", use the ${var//find/replace} form:
+echo ${str//foo/bar}
+
+#check if a string matches a pattern
+if [[ $file = *.zip ]];then
+  #do something
+fi
+# code * matches any string, ? matches a single char, and [...] matches any character in ... or a character class
+
+#here is an example that matches if answer is Y or y:
+if [[ $answer = [Yy]* ]]; then
+    # do something
+fi
+
+#find the lenght of the string
+echo ${#str}
+
+#extract a substring from a string
+str="hello world"
+echo ${str:6}
+
+#uppercase a string
+#the decalre command in bash declares variables or gives them attributes.
+#in this case we give the variable var attribute -u, which upper-cases its content 
+#whenever it gets assigned somthing.
+decalre -u var
+var="foo bar"
+echo $var 
+# or use another feature of bash 4, which is the ${var^^} that uppercase a string
+str="zoo raw"
+echo ${str^^}
+
+#lowercase a string
+declare -l var
+var="FOO BAR"
+#another way to lowercase a string is to use ${var,,}
+str="FOO BAR"
+echo ${str,,}
+
+
+
+
+
+
+
+
+
+

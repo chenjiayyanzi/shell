@@ -1,0 +1,66 @@
+#!/bin/bash
+
+echo "Step 1"
+echo "Checking if docker is running"
+# make sure you have docker installed and running
+# Check if docker is running
+docker_state=$(docker info >/dev/null 2>&1)
+if [[ $? -ne 0 ]]; then
+    echo "Docker does not seem to be running, run it first and retry"
+    exit 1
+fi
+echo "Docker is running"
+echo "..............................................."
+
+echo "Step 2"
+echo "Trying to pull postgres image from docker hub"
+# pull postgresql image from docker
+pull_image=$(docker pull postgres:12.3)
+if [[ $? -ne 0 ]]
+then
+  echo "Docker failed to pull the image postgres"
+  exit 1
+fi
+echo "Image has been downloaded."
+echo "................................................"
+
+echo "Step 3"
+echo "Trying to run postgres in docker"
+# run postgres in docker
+run_postgres=$(docker run --name agflow-pg -e POSTGRES_PASSWORD=agflow -e POSTGRES_USER=agflow -e POSTGRES_DB=production -d -p 5432:5432 postgres:12.3)
+if [[ $? -ne 0 ]]
+then
+  echo "Failed to run postgres in docker"
+  docker container rm agflow-pg
+  exit 1
+fi
+echo "DB is running successfully"
+echo "................................................"
+
+echo "Step 4"
+echo "Loading dump file"
+# load dump file
+find . -name production.dump
+if [[ $? -ne 0 ]]
+then
+  echo "Don't find the dump file named production.dump in local path, please copy your file under the same folder"
+  exit 1
+fi
+
+host_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' agflow-pg)
+echo "The host ip is $host_ip"
+docker cp production.dump afglow-pg:/production.dump
+load_file=$(docker exec agflow-pg pg_restore -h $host_ip -U agflow -d production  production.dump)
+if [[ $? -ne 0 ]]
+then 
+  echo "Failed to load dump file"
+  docker container stop agflow-pg
+  docker container rm agflow-pg
+  exit 1
+fi
+
+echo "DB is ready to use"
+echo "DB username is agflow, password is agflow, database is production"
+echo "Finish............................................"
+
+

@@ -1,0 +1,17 @@
+#add the -x option to enable debug tracing of a script :
+bash -x script.sh
+
+#debug only portions of the script using set -x and set +x 
+ #Filename: debug.sh
+for i in {1..6};
+  do
+    set -x 
+    echo $i 
+    set +x
+   done
+ echo "Script executed"
+
+#the shebang can be changed from #!/bin/bash to #!/bin/bash -xv to enable debugging 
+set -v: this display input when they are read
+set +v: this disable printing input
+

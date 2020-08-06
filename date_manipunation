@@ -1,0 +1,9 @@
+#the epoch time can be printed as follows
+date +%s
+
+#check the time taken by a set of commands
+start=$(date +%s)
+commands;
+end=$(date +%s)
+difference=$ (( end - start ))
+
