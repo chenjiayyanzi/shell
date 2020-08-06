@@ -1,0 +1,30 @@
+#the IFS internal field separator is an imporatant concept in shell scripting
+#considering the case where we need to iterate through words in a string or comma seperated values(CSV)
+#in the first case we will use IFS=" " and in the second IFS=","
+
+data="name,sex,rollno,location"
+oldIFS=$IFS
+IFS=,
+for item in $data
+do 
+  echo Item: $item
+done
+
+IFS=$oldIFS
+
+
+#another example usage of IFS by taking the /etc/passwd file into consideration
+file=/etc/passwd
+oldIFS2=$IFS
+lastline=`cat $file | tail -n1`
+IFS=":"
+count=0
+for i in $lastline; do 
+  [ $count -eq 0 ] && user=$i
+  [ $count -eq 6 ] && shell=$i
+  let count++
+done
+
+
+IFS=$oldIFS2
+
